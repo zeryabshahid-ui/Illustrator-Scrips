@@ -2,12 +2,20 @@
 
 A growing collection of ExtendScript tools for Adobe Illustrator, built to cut out repetitive clicks. Every script comes with its own control panel so you can fine-tune the result before applying it.
 
+- Glassmorphism
+- Select Same Color Text
+- Select Same Color Lines
+- Paste to Replace
+- Extract Logo Colors
+- Script Launcher
+
 ## Contents
 
 - [Glassmorphism](#glassmorphism)
 - [Select Same Color Text](#select-same-color-text)
 - [Select Same Color Lines](#select-same-color-lines)
 - [Paste to Replace](#paste-to-replace)
+- [Extract Logo Colors](#extract-logo-colors)
 - [Script Launcher](#script-launcher)
 - [Installation](#installation)
 - [Compatibility](#compatibility)
@@ -74,6 +82,31 @@ Guides, clipping paths, and locked or hidden lines are left alone.
 Also: include stroke width in the bounds, and scale strokes and effects when resizing.
 
 **Targets** — delete them or hide them, optionally copy the target’s fill and stroke onto simple-path replacements, and keep the target’s name. **Remember my settings** stores the dialog choices for next time.
+
+## Extract Logo Colors
+
+**Note:** This script works on vector artwork only. It does not work on images (placed or embedded JPG/PNG/raster images are skipped).
+
+`scripts/ExtractLogoColors.jsx` reads a selected logo and lists every colour it uses — fills, strokes, gradient stops, text, spot colours, and symbols. Each row shows HEX, RGB, CMYK, a usage count, and the source (fill, stroke, gradient, text, or a spot name), sorted with the most-used colours first.
+
+**Options**
+
+- **Include strokes**
+- **Include gradient stops**
+- **Include text**
+- **Look inside symbols**
+- **Merge similar colours (tolerance)** — a slider from exact (`0`) up to shades that are close enough to count as one colour
+
+**Buttons**
+
+- **Add to Swatches** — adds the colours as a named colour group. The name is editable (it starts from the selection’s name, or “Logo Colors”). Swatch names that already exist are skipped.
+- **Make palette** — draws labelled squares (HEX, RGB, and CMYK) beside the logo, on a layer called **Color Palette**.
+- **Copy HEX list** — opens the list as HEX only, HEX + RGB + CMYK, or CSS variables, ready to copy.
+- **Close**
+
+Select rows in the list to limit those actions to the colours you picked. With no rows selected, every colour is used.
+
+Colours that exist only in the Appearance panel, or that come from live effects such as a drop shadow, are not read. The script looks at the fill and stroke on the objects themselves. Hidden objects are ignored, and meshes, plugin objects, and pattern fills are skipped and counted in the dialog.
 
 ## Script Launcher
 
