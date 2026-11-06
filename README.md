@@ -7,6 +7,7 @@ A growing collection of ExtendScript tools for Adobe Illustrator, built to cut o
 - Select Same Color Lines
 - Paste to Replace
 - Extract Logo Colors
+- Copy Appearance
 - Script Launcher
 
 ## Contents
@@ -16,6 +17,7 @@ A growing collection of ExtendScript tools for Adobe Illustrator, built to cut o
 - [Select Same Color Lines](#select-same-color-lines)
 - [Paste to Replace](#paste-to-replace)
 - [Extract Logo Colors](#extract-logo-colors)
+- [Copy Appearance](#copy-appearance)
 - [Script Launcher](#script-launcher)
 - [Installation](#installation)
 - [Compatibility](#compatibility)
@@ -107,6 +109,16 @@ Also: include stroke width in the bounds, and scale strokes and effects when res
 Select rows in the list to limit those actions to the colours you picked. With no rows selected, every colour is used.
 
 Colours that exist only in the Appearance panel, or that come from live effects such as a drop shadow, are not read. The script looks at the fill and stroke on the objects themselves. Hidden objects are ignored, and meshes, plugin objects, and pattern fills are skipped and counted in the dialog.
+
+## Copy Appearance
+
+`scripts/CopyAppearance.jsx` copies one object’s full Appearance panel — fills, strokes, effects, and opacity — through a floating panel, then applies that look to one selected object or all selected objects. It does not copy path shape, size, or contents.
+
+- **Copy appearance** — stores the selected object’s appearance. If several objects are selected, the frontmost one is used.
+- **Apply to selected** — applies the stored appearance to every object in the current selection.
+- **Apply topmost to the rest** — with the source in front of the other selected objects, copies that frontmost appearance onto the rest in one click.
+
+Locked or hidden objects, and placed or raster images, are skipped. The selection is restored after each action.
 
 ## Script Launcher
 
