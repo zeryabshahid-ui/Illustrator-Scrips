@@ -8,6 +8,9 @@ A growing collection of ExtendScript tools for Adobe Illustrator, built to cut o
 - Paste to Replace
 - Extract Logo Colors
 - Copy Appearance
+- Copy Size
+- Move To New Layer
+- Repeat Action
 - Script Launcher
 
 ## Contents
@@ -18,8 +21,12 @@ A growing collection of ExtendScript tools for Adobe Illustrator, built to cut o
 - [Paste to Replace](#paste-to-replace)
 - [Extract Logo Colors](#extract-logo-colors)
 - [Copy Appearance](#copy-appearance)
+- [Copy Size](#copy-size)
+- [Move To New Layer](#move-to-new-layer)
+- [Repeat Action](#repeat-action)
 - [Script Launcher](#script-launcher)
 - [Installation](#installation)
+- [Adding a keyboard shortcut (no install needed)](#adding-a-keyboard-shortcut-no-install-needed)
 - [Compatibility](#compatibility)
 - [License](#license)
 
@@ -85,6 +92,8 @@ Also: include stroke width in the bounds, and scale strokes and effects when res
 
 **Targets** — delete them or hide them, optionally copy the target’s fill and stroke onto simple-path replacements, and keep the target’s name. **Remember my settings** stores the dialog choices for next time.
 
+Assign a function key with no extra install from [Adding a keyboard shortcut (no install needed)](#adding-a-keyboard-shortcut-no-install-needed). If you build and run the optional Windows helper described under [Repeat Action](#repeat-action), **Ctrl+Alt+V** runs Paste to Replace while Illustrator is the active window.
+
 ## Extract Logo Colors
 
 **Note:** This script works on vector artwork only. It does not work on images (placed or embedded JPG/PNG/raster images are skipped).
@@ -119,6 +128,46 @@ Colours that exist only in the Appearance panel, or that come from live effects 
 - **Apply topmost to the rest** — with the source in front of the other selected objects, copies that frontmost appearance onto the rest in one click.
 
 Locked or hidden objects, and placed or raster images, are skipped. The selection is restored after each action.
+
+## Copy Size
+
+`scripts/CopySize.jsx` copies the width and height of one object and applies them to other objects from a floating panel. Size is measured in points from the object bounds, excluding strokes and live effects. Targets keep their centres and their stroke weights. A clipping group is measured from its clipping path.
+
+- **Copy dimensions** — select exactly one source object.
+- **Width** and **Height** — apply both to stretch to the copied size, or just one axis and leave the other unchanged.
+- **Apply to selected** — resize every selected target.
+
+Locked or hidden objects, guides, and clipping paths are skipped. The copied size stays available until you close the panel, including when you switch documents.
+
+## Move To New Layer
+
+`scripts/MoveToNewLayer.jsx` moves the selected objects onto a layer it creates for you. The layer is named **Layer N** (the next free number) and sits directly above the layer of the frontmost selected object. Objects keep their stacking order and their place on the artboard.
+
+Selecting a group, or a path inside a compound path, moves the whole group or compound path. Objects inside a selected group stay in that group. Locked or hidden objects are skipped and reported. The moved objects stay selected, and the new layer becomes the active layer.
+
+## Repeat Action
+
+`scripts/RepeatAction.jsx` is a floating palette with three modes. Choose one (it is saved immediately), do that operation once yourself in Illustrator, then repeat it on the next selection.
+
+- **Transform** — Transform Again: the latest move, scale, rotation, reflection, or shear. If that transform made a copy, Illustrator may repeat the copy too.
+- **Pathfinder** — the last operation from the Pathfinder panel, not the Effect menu. The current selection is processed together. For separate results, select each group on its own and repeat.
+- **Clipping mask** — Object > Clipping Mask > Make. Put the mask shape on top and select it with the artwork (at least two objects). The topmost object becomes the mask.
+
+**Repeat on selection** runs the chosen mode from the panel. The same action can take a function key with no extra software — see [Adding a keyboard shortcut (no install needed)](#adding-a-keyboard-shortcut-no-install-needed).
+
+### Optional Windows shortcut helper
+
+`scripts/_RepeatAction/` is an advanced, build-it-yourself option for **Ctrl+Alt+R** (Repeat Action) and **Ctrl+Alt+V** (Paste to Replace). The repository includes the source only.
+
+Keep that folder next to `RepeatAction.jsx`. Its name starts with `_`, so Script Launcher leaves it off the list. After you build `RepeatActionHotkey.exe` into the folder, open Repeat Action and click **Enable shortcut**. The helper registers those two shortcuts only while Illustrator is the active window, and it does not change Illustrator’s own shortcuts. The tray menu’s **Exit shortcut helper** stops it for the session. Notes on what the helper remembers are in `scripts/_RepeatAction/README.txt`.
+
+Build it on Windows from `scripts/_RepeatAction` with the .NET Framework compiler:
+
+```
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /target:winexe /reference:System.Windows.Forms.dll /reference:System.Drawing.dll RepeatActionHotkey.cs
+```
+
+That writes `RepeatActionHotkey.exe` next to the `.cs` file, on your machine only.
 
 ## Script Launcher
 
@@ -164,6 +213,19 @@ Files whose names start with `_` or `.` stay off the list, and only the top leve
 5. Click the folder button and point it at your `scripts` folder. Files whose names start with `_` are hidden from the list.
 
 **macOS:** copy `launcher/ScriptLauncher` to `~/Library/Application Support/Adobe/CEP/extensions/ScriptLauncher`, then enable unsigned extensions with `defaults write com.adobe.CSXS.11 PlayerDebugMode 1` and restart Illustrator. The panel is in the same **Window > Extensions** menu.
+
+## Adding a keyboard shortcut (no install needed)
+
+This works for any script in the repo once it appears on Illustrator’s **File > Scripts** menu. Copy the `.jsx` file into Illustrator’s Scripts folder and restart Illustrator first (see [Installation](#installation)).
+
+1. Open **Window > Actions**.
+2. Create a new action.
+3. From the Actions panel menu, choose **Insert Menu Item**.
+4. Pick **File > Scripts > PasteToReplace**, or any other script you installed, such as CopyAppearance, CopySize, MoveToNewLayer, or RepeatAction.
+5. Stop recording.
+6. Double-click the action and assign a **Function Key**, for example F5, optionally with Shift or Ctrl.
+
+**Ctrl+Alt+R** and **Ctrl+Alt+V** come from the optional Windows helper under [Repeat Action](#repeat-action), which you build yourself.
 
 ## Compatibility
 
