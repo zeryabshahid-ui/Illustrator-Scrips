@@ -46,8 +46,9 @@ internal sealed class RepeatActionHotkey : ApplicationContext
     {
         settingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ZeryabRepeatAction");
         Directory.CreateDirectory(settingsDirectory);
+        // Paths follow this folder, wherever the download lives. Do not hardcode a drive or Scripts directory.
+        // RepeatActionRun.jsx sits beside the exe; PasteToReplace.jsx is one folder up (scripts/ in this repo).
         scriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RepeatActionRun.jsx");
-        // PasteToReplace.jsx lives one folder up, next to RepeatAction.jsx.
         pastePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "PasteToReplace.jsx"));
         receiver = new HotkeyWindow(); receiver.Pressed = OnHotkey;
         var menu = new ContextMenuStrip();
@@ -109,7 +110,7 @@ internal sealed class RepeatActionHotkey : ApplicationContext
     private void OnHotkey(int id)
     {
         if (id == 1) { RunScript(scriptPath, "RepeatActionRun.jsx is missing from the helper folder.", "Could not repeat."); }
-        else if (id == 2) { RunScript(pastePath, "PasteToReplace.jsx is missing from the Illustrator Scripts folder.", "Could not run Paste to Replace."); }
+        else if (id == 2) { RunScript(pastePath, "PasteToReplace.jsx is missing. Keep it one folder above this helper.", "Could not run Paste to Replace."); }
     }
 
     private void RunScript(string path, string missing, string failure)

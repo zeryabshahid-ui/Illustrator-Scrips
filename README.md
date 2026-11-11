@@ -27,6 +27,7 @@ A growing collection of ExtendScript tools for Adobe Illustrator, built to cut o
 - [Script Launcher](#script-launcher)
 - [Installation](#installation)
 - [Adding a keyboard shortcut (no install needed)](#adding-a-keyboard-shortcut-no-install-needed)
+- [Keyboard shortcuts (Windows, one click)](#keyboard-shortcuts-windows-one-click)
 - [Compatibility](#compatibility)
 - [License](#license)
 
@@ -92,7 +93,7 @@ Also: include stroke width in the bounds, and scale strokes and effects when res
 
 **Targets** — delete them or hide them, optionally copy the target’s fill and stroke onto simple-path replacements, and keep the target’s name. **Remember my settings** stores the dialog choices for next time.
 
-Assign a function key with no extra install from [Adding a keyboard shortcut (no install needed)](#adding-a-keyboard-shortcut-no-install-needed). If you build and run the optional Windows helper described under [Repeat Action](#repeat-action), **Ctrl+Alt+V** runs Paste to Replace while Illustrator is the active window.
+Assign a function key with no extra install from [Adding a keyboard shortcut (no install needed)](#adding-a-keyboard-shortcut-no-install-needed). With the [Windows one-click helper](#keyboard-shortcuts-windows-one-click) running, **Ctrl+Alt+V** runs Paste to Replace while Illustrator is the active window.
 
 ## Extract Logo Colors
 
@@ -157,17 +158,9 @@ Selecting a group, or a path inside a compound path, moves the whole group or co
 
 ### Optional Windows shortcut helper
 
-`scripts/_RepeatAction/` is an advanced, build-it-yourself option for **Ctrl+Alt+R** (Repeat Action) and **Ctrl+Alt+V** (Paste to Replace). The repository includes the source only.
+`scripts/_RepeatAction/` is the source for **Ctrl+Alt+R** (Repeat Action) and **Ctrl+Alt+V** (Paste to Replace). No compiled program is in the repository. Keep that folder next to `RepeatAction.jsx`. Its name starts with `_`, so Script Launcher leaves it off the list.
 
-Keep that folder next to `RepeatAction.jsx`. Its name starts with `_`, so Script Launcher leaves it off the list. After you build `RepeatActionHotkey.exe` into the folder, open Repeat Action and click **Enable shortcut**. The helper registers those two shortcuts only while Illustrator is the active window, and it does not change Illustrator’s own shortcuts. The tray menu’s **Exit shortcut helper** stops it for the session. Notes on what the helper remembers are in `scripts/_RepeatAction/README.txt`.
-
-Build it on Windows from `scripts/_RepeatAction` with the .NET Framework compiler:
-
-```
-C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /target:winexe /reference:System.Windows.Forms.dll /reference:System.Drawing.dll RepeatActionHotkey.cs
-```
-
-That writes `RepeatActionHotkey.exe` next to the `.cs` file, on your machine only.
+Double-click `Install-Shortcuts.bat` in that folder. The steps, and how to remove it, are in [Keyboard shortcuts (Windows, one click)](#keyboard-shortcuts-windows-one-click). The shortcuts register only while Illustrator is the active window. The tray menu’s **Exit shortcut helper** stops the helper until the next sign-in. Notes are in `scripts/_RepeatAction/README.txt`.
 
 ## Script Launcher
 
@@ -225,7 +218,26 @@ This works for any script in the repo once it appears on Illustrator’s **File 
 5. Stop recording.
 6. Double-click the action and assign a **Function Key**, for example F5, optionally with Shift or Ctrl.
 
-**Ctrl+Alt+R** and **Ctrl+Alt+V** come from the optional Windows helper under [Repeat Action](#repeat-action), which you build yourself.
+**Ctrl+Alt+R** and **Ctrl+Alt+V** are the Windows helper in [Keyboard shortcuts (Windows, one click)](#keyboard-shortcuts-windows-one-click).
+
+## Keyboard shortcuts (Windows, one click)
+
+Download the repository and leave the folders as they are. `PasteToReplace.jsx` and `RepeatAction.jsx` stay in `scripts/`. The helper stays in `scripts/_RepeatAction/`, beside `RepeatActionRun.jsx`.
+
+Double-click `scripts/_RepeatAction/Install-Shortcuts.bat`. It finds Windows’ .NET Framework compiler, builds `RepeatActionHotkey.exe` from `RepeatActionHotkey.cs` on your PC, registers that program to start when you sign in, and starts it. The download contains source only. Nothing is prebuilt. The `.exe` is created on your machine and is not part of the repository. No administrator rights are required.
+
+While the helper is running:
+
+- **Ctrl+Alt+R** repeats the mode chosen in Repeat Action (Transform, Pathfinder, or Clipping mask).
+- **Ctrl+Alt+V** runs Paste to Replace.
+
+Both shortcuts work only while Illustrator is the active window. They are not registered when another application is in front. Open Repeat Action once to choose Transform, Pathfinder, or Clipping mask. That choice is remembered.
+
+To remove the helper, double-click `scripts/_RepeatAction/Uninstall-Shortcuts.bat`. It stops the helper, removes the sign-in startup entry, and deletes the compiled program. Your scripts stay where they are.
+
+Windows SmartScreen may ask you to confirm a downloaded `.bat` file. If it shows “Windows protected your PC”, choose **More info**, then **Run anyway**.
+
+A function key, with no helper and no compile step, is in [Adding a keyboard shortcut (no install needed)](#adding-a-keyboard-shortcut-no-install-needed).
 
 ## Compatibility
 
