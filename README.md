@@ -1,6 +1,8 @@
 # Illustrator Scripts
 
-A growing collection of ExtendScript tools for Adobe Illustrator, built to cut out repetitive clicks. Every script comes with its own control panel so you can fine-tune the result before applying it.
+A growing collection of ExtendScript tools for Adobe Illustrator, built to cut out repetitive clicks. Every script comes with its own control panel so you can fine-tune the result before applying it. Photoshop scripts and a dockable panel are in `photoshop/`.
+
+Built by Zeryab Shahid with the help of AI.
 
 - Glassmorphism
 - Select Same Color Text
@@ -11,7 +13,9 @@ A growing collection of ExtendScript tools for Adobe Illustrator, built to cut o
 - Copy Size
 - Move To New Layer
 - Repeat Action
+- Export Selected Objects
 - Script Launcher
+- Photoshop scripts
 
 ## Contents
 
@@ -24,7 +28,9 @@ A growing collection of ExtendScript tools for Adobe Illustrator, built to cut o
 - [Copy Size](#copy-size)
 - [Move To New Layer](#move-to-new-layer)
 - [Repeat Action](#repeat-action)
+- [Export Selected Objects](#export-selected-objects)
 - [Script Launcher](#script-launcher)
+- [Photoshop scripts](#photoshop-scripts)
 - [Installation](#installation)
 - [Adding a keyboard shortcut (no install needed)](#adding-a-keyboard-shortcut-no-install-needed)
 - [Keyboard shortcuts (Windows, one click)](#keyboard-shortcuts-windows-one-click)
@@ -162,6 +168,12 @@ Selecting a group, or a path inside a compound path, moves the whole group or co
 
 Double-click `Install-Shortcuts.bat` in that folder. The steps, and how to remove it, are in [Keyboard shortcuts (Windows, one click)](#keyboard-shortcuts-windows-one-click). The shortcuts register only while Illustrator is the active window. The tray menu’s **Exit shortcut helper** stops the helper until the next sign-in. Notes are in `scripts/_RepeatAction/README.txt`.
 
+## Export Selected Objects
+
+`scripts/ExportSelectedObjects.jsx` exports the objects you have selected as PNG, JPG, SVG, PDF, EPS, and AI. Each selected object or group is listed with a checkbox, an editable file name, and its size. Export each ticked object as its own file, or all ticked objects together as one file.
+
+The export area is either trimmed to the object bounds with padding, or the artboard the object sits on. Clipping groups are measured from the clipping path. PNG and JPG use Illustrator’s resolution menu: Screen (72 ppi), Medium (150 ppi), High (300 ppi), or Other. Options for the formats you tick appear in the dialog, and the choices are remembered for the next run. Your document is not changed, and the selection is restored when the export finishes.
+
 ## Script Launcher
 
 The dockable panel in `launcher/ScriptLauncher/` lists your scripts and runs one with a click. It has a search box, star favourites that pin to the top, a refresh button, and a folder button that points the list at any scripts folder. The panel follows Illustrator’s light or dark theme.
@@ -239,12 +251,55 @@ Windows SmartScreen may ask you to confirm a downloaded `.bat` file. If it shows
 
 A function key, with no helper and no compile step, is in [Adding a keyboard shortcut (no install needed)](#adding-a-keyboard-shortcut-no-install-needed).
 
+## Photoshop scripts
+
+These live in `photoshop/`. Run one with **File > Scripts > Browse…**, or copy the `.jsx` files into Photoshop’s Presets/Scripts folder and restart Photoshop so they appear under **File > Scripts**.
+
+### Export Selected Artboards
+
+`photoshop/ExportSelectedArtboards.jsx` exports artboards from the active document. The dialog lists every artboard as a checkbox. Artboards selected in the Layers panel start ticked; if none are selected, all of them do. Each row has an editable name, and a live preview shows the file name that will be written. **Also rename artboards in the document** writes those names back after the export. The original document is otherwise left untouched.
+
+Formats, with the options that belong to each one:
+
+- **PDF** — a PDF preset
+- **TIFF** — compression, and whether to keep layers
+- **PSB**
+- **PNG**
+- **JPG** — quality from 0 to 12
+
+### PS Script Launcher
+
+`photoshop/_PSScriptLauncher.jsx` is a popup that lists the `.jsx` and `.js` files in its own folder. Search, then run one. Names that start with `_` stay off the list, including the launcher itself. The last script you ran is selected the next time. Put `ExportSelectedArtboards.jsx` in that same folder.
+
+### Dockable panel
+
+`photoshop/PSScriptLauncherPanel/ZeryabPSScriptLauncher/` is a dockable panel with search, favourites, and a folder button. It follows Photoshop’s light or dark theme. If `E:\Illustrator Scripts\PS Scripts` is on the computer, the panel uses that folder. Otherwise it asks you to choose a scripts folder the first time, and remembers the choice.
+
+**Windows**
+
+1. Copy the `ZeryabPSScriptLauncher` folder to:
+
+   `%APPDATA%\Adobe\CEP\extensions\ZeryabPSScriptLauncher`
+
+   The folder that contains `CSXS`, `index.html`, `css`, `js`, and `host` should be named `ZeryabPSScriptLauncher`.
+
+2. Photoshop only loads unsigned CEP extensions when debug mode is on. Paste this into Command Prompt. It sets the string value `PlayerDebugMode` to `1` under `HKCU\Software\Adobe\CSXS.9` through `CSXS.13`:
+
+   ```bat
+   for %N in (9 10 11 12 13) do reg add "HKCU\Software\Adobe\CSXS.%N" /v PlayerDebugMode /t REG_SZ /d 1 /f
+   ```
+
+3. Restart Photoshop.
+4. Open **Window > Extensions (legacy) > PS Script Launcher**.
+
 ## Compatibility
 
-Illustrator CC 2017 and later. The scripts and the panel were written with Illustrator 2026 as the tested target. The panel manifest asks for CSXS 9 or newer.
+Illustrator CC 2017 and later. The Illustrator scripts and panel were written with Illustrator 2026 as the tested target. That panel manifest asks for CSXS 9 or newer.
+
+The Photoshop panel asks for Photoshop 2020 or later and CSXS 9 or newer. Open it from **Window > Extensions (legacy)**.
 
 ## License
 
 This project is released under the [MIT License](LICENSE). Copyright 2026 zeryabshahid-ui.
 
-`launcher/ScriptLauncher/js/CSInterface.js` is Adobe’s CSInterface library. It stays under the Adobe license notice at the top of that file, which is separate from the MIT license that covers the rest of this repository.
+`launcher/ScriptLauncher/js/CSInterface.js` and `photoshop/PSScriptLauncherPanel/ZeryabPSScriptLauncher/js/CSInterface.js` are Adobe’s CSInterface library. Each stays under the Adobe license notice at the top of that file, which is separate from the MIT license that covers the rest of this repository.
